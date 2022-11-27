@@ -16,7 +16,7 @@ class QiitaAPI:
         self.headers = {
             "content-type" : "application/json",
             "charset"      : "utf-8",
-            "Authorization": "Bearer {}".format(access_token)
+            "Authorization": f"Bearer {access_token}"
         }
         self.columns = [
             "likes_count",
@@ -30,26 +30,26 @@ class QiitaAPI:
             "items_count"
         ]
 
-    @retry(delay=1, backoff=2, max_delay=8)
-    def __get(self, yyyymm, page=1, per_page=100):
+    @retry(delay=3.6)
+    def __get(self, time_str, page=1, per_page=100):
         params={
             "page"    : page,
             "per_page": per_page,
-            "query"   : "created:{}".format(yyyymm)  # このように年月を指定することで制限を回避できる
+            "query"   : f"created:{time_str}"  # このように年月を指定することで制限を回避できる
         }
         return requests.get(self.url, params=params, headers=self.headers)
 
-    def n_pages(self, yyyymm, page=1, per_page=100):
-        res = self.__get(yyyymm, page, per_page)
+    def n_pages(self, time_str, page=1, per_page=100):
+        res = self.__get(time_str, page, per_page)
         headers = res.headers
         link_last = headers.get("Link").split(",")[-1]
         n_pages = int(re.search(r"\?page=(\d+)", link_last).group(1))
-        print(f"- search time: {yyyymm}, n_pages: {n_pages}")
+        print(f"- search time: {time_str}, n_pages: {n_pages}")
         return n_pages
 
-    def page_content(self, yyyymm, page, per_page=100):
+    def page_content(self, time_str, page, per_page=100):
         print(f"\t- page: {page}")
-        res = self.__get(yyyymm, page, per_page)
+        res = self.__get(time_str, page, per_page)
         res = res.json()
         data_list = []
         for item in res:
