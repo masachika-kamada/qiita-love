@@ -38,7 +38,7 @@ def create_dataset(api, time_range, file_base, header_bool=False, remove_time=No
 
 def main():
     start_date = "2020-01-01"
-    end_date   = "2021-11-31"
+    end_date   = "2021-11-30"
     api = QiitaAPI()
 
     for date in pd.date_range(start=start_date, end=end_date, freq="MS"):
