@@ -1,6 +1,4 @@
 __pycache__/
-data
 myvenv
-model
-model_svd
-model_tfidf
+*.csv
+*.pkl

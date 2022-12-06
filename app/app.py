@@ -76,14 +76,10 @@ if bt:
     data = data.drop(['body'], axis=1)
     data = pd.concat([data, data_tags_vec], axis=1)
     data = data.drop(['tags'], axis=1)
-    st.write(data)
-    st.write(data.dtypes)
-    st.write(type(data))
-    st.write(data.shape)
 
     # 予測モデルの読み込み
-    model = pickle.load(open(r'model\trained_model.pkl', 'rb'))
+    model = pickle.load(open(r'model\trained_rfr_model.pkl', 'rb'))
 
     # 予測
     pred = model.predict(data)
-    st.write(pred)
+    st.write(f'いいね数の予測値は{pred[0]}です！')
