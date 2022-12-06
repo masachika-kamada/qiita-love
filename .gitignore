@@ -2,3 +2,9 @@ __pycache__/
 myvenv
 *.csv
 *.pkl
+.env
+data/
+old/
+test*
+*.log
+mlruns/
