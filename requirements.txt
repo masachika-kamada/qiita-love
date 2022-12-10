@@ -1,5 +1,8 @@
 streamlit
 pandas
 lightgbm
-sklearn
 numpy
+mecab-python3
+unidic-lite
+matplotlib
+scikit-learn
