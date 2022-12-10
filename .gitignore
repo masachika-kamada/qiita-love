@@ -8,3 +8,4 @@ old/
 test*
 *.log
 mlruns/
+wandb/
