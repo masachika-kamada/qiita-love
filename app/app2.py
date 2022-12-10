@@ -69,6 +69,7 @@ def preprocess(df):
     return df
 
 
+# TODO: 新規の単語へ対応
 def predict(df):
     # 予測モデルの読み込み
     model = pickle.load(open("../data_analysis/output/model.pkl", "rb"))
@@ -90,6 +91,9 @@ def main():
     items_count = st.number_input(label="既に公開済みの記事の数を入力して下さい", step=1, min_value=0)
 
     pred_button = st.button("いいね数を予測する")
+
+    # TODO: モデルの読み込み（loadに10秒程度かかるので）
+    # TODO: classを定義してインスタンスを作成するのがよさそう
 
     if pred_button is True:
         # TODO: 入力値のバリデーション
