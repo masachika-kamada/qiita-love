@@ -7,6 +7,7 @@ from sklearn.decomposition import TruncatedSVD
 import pickle
 import MeCab
 import re
+import streamlit.components.v1 as stc
 
 
 class Analyzer:
@@ -77,7 +78,6 @@ class Analyzer:
         self.df = self.df.drop(["body"], axis=1)
         self.df = pd.concat([self.df, data_tags_vec], axis=1)
         self.df = self.df.drop(["tags"], axis=1)
-        print(self.df.head())
 
     def predict(self, title, body, tags, followers_count, organization, items_count):
         self.__create_dataframe(title, body, tags, followers_count, organization, items_count)
@@ -90,8 +90,45 @@ class Analyzer:
 
 
 def main():
+    stc.html("""
+    <body>
+      <div class="header">
+      <div class="header-logo">Qiitaがキター!</div>
+      <div class="header-list">
+        <ul>
+        <li>プログラミングとは</li>
+        <li>学べるレッスン</li>
+        <li>お問い合わせ</li>
+        </ul>
+      </div>
+      </div>
+    </body>
 
-    st.title("Qiitaいいね数予測アプリ")
+    <style>
+    body {
+      font-family: "YakuHanJPs";
+    }
+    li {
+      list-style: none;
+      float: left;
+      /* 上下のpaddingを33px、左右のpaddingを20pxにしてください */
+      padding: 0px 30px 0px 30px;
+    }
+
+
+    .header {
+      background-color: #59bb0c;
+      color: #fff;
+      height: 124px;
+    }
+
+    .header-logo {
+      font-size: 36px;
+      /* 上下のpaddingを20px、左右のpaddingを40pxにしてください */
+      padding: 20px 30px 0px 30px;
+    }
+    </style>
+    """)
 
     # 入力を受け取る
     title = st.text_input(label="記事のタイトルを入力して下さい")
