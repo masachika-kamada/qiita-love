@@ -1,13 +1,11 @@
-import streamlit as st
+import re
 import pandas as pd
 import numpy as np
 import lightgbm as lgb
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import TruncatedSVD
 import pickle
 import MeCab
-import re
-import streamlit.components.v1 as stc
+from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class Analyzer:
@@ -54,9 +52,9 @@ class Analyzer:
         # organizationの値が"はい"ならTrue, "いいえ"ならFalseに変換
         self.df["organization"] = self.df["organization"].map({"はい": True, "いいえ": False})
 
-        self.df['body'] = self.df['body'].apply(self.__wakati_process)
-        self.df['title'] = self.df['title'].apply(self.__wakati_process)
-        self.df['tags'] = self.df['tags'].apply(self.__tags_process)
+        self.df["body"] = self.df["body"].apply(self.__wakati_process)
+        self.df["title"] = self.df["title"].apply(self.__wakati_process)
+        self.df["tags"] = self.df["tags"].apply(self.__tags_process)
 
         # tf-idf化
         tfidf_title = self.model_tfidf_title.transform(self.df["title"])
@@ -87,68 +85,3 @@ class Analyzer:
         if like_pred < 0:
             like_pred = 0
         return like_pred
-
-
-def main():
-    stc.html("""
-    <body>
-      <div class="header">
-      <div class="header-logo">Qiitaがキター!</div>
-      <div class="header-list">
-        <ul>
-        <li>プログラミングとは</li>
-        <li>学べるレッスン</li>
-        <li>お問い合わせ</li>
-        </ul>
-      </div>
-      </div>
-    </body>
-
-    <style>
-    body {
-      font-family: "YakuHanJPs";
-    }
-    li {
-      list-style: none;
-      float: left;
-      /* 上下のpaddingを33px、左右のpaddingを20pxにしてください */
-      padding: 0px 30px 0px 30px;
-    }
-
-
-    .header {
-      background-color: #59bb0c;
-      color: #fff;
-      height: 124px;
-    }
-
-    .header-logo {
-      font-size: 36px;
-      /* 上下のpaddingを20px、左右のpaddingを40pxにしてください */
-      padding: 20px 30px 0px 30px;
-    }
-    </style>
-    """)
-
-    # 入力を受け取る
-    title = st.text_input(label="記事のタイトルを入力して下さい")
-    body = st.text_area(label="記事の本文を入力して下さい", height=500)
-    tags = st.text_input(label="タグをカンマ区切りで入力して下さい")
-    followers_count = st.number_input(label="フォロワー数を入力して下さい", step=1, min_value=0)
-    organization = st.radio(label="組織に参加していますか", options=["はい", "いいえ"])
-    items_count = st.number_input(label="既に公開済みの記事の数を入力して下さい", step=1, min_value=0)
-
-    pred_button = st.button("いいね数を予測する")
-
-    analyzer = Analyzer()
-
-    if pred_button is True:
-        # TODO: 入力値のバリデーション
-
-        # 予測
-        pred = analyzer.predict(title, body, tags, followers_count, organization, items_count)
-        st.write(f"## いいね数の予測値は {pred:.2f} です！")
-
-
-if __name__ == "__main__":
-    main()
