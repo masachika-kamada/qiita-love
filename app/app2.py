@@ -11,7 +11,7 @@ import re
 
 class Analyzer:
     def __init__(self):
-        dir_ref = "../data_analysis/output_mecab"
+        dir_ref = "data_analysis/output_mecab"
         self.model = pickle.load(open(f"{dir_ref}/model.pkl", "rb"))
         self.model_tfidf_title = pickle.load(open(f"{dir_ref}/tfidf_title.pkl", "rb"))
         self.model_tfidf_body = pickle.load(open(f"{dir_ref}/tfidf_body.pkl", "rb"))
