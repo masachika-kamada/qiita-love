@@ -1,0 +1,8 @@
+streamlit
+pandas
+lightgbm
+numpy
+mecab-python3
+unidic-lite
+matplotlib
+scikit-learn
