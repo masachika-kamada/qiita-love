@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
 import pickle
 import MeCab
+import re
 
 
 class Analyzer:
@@ -45,8 +46,8 @@ class Analyzer:
         return " 。 ".join(wakati_sentences)
 
     def __tags_process(self, x):
-        x = eval(x)
-        return " ".join(x)
+        x_split = re.split(",|、|，", x)
+        return " ".join(x_split)
 
     def __preprocess(self):
         # organizationの値が"はい"ならTrue, "いいえ"ならFalseに変換
@@ -81,7 +82,11 @@ class Analyzer:
     def predict(self, title, body, tags, followers_count, organization, items_count):
         self.__create_dataframe(title, body, tags, followers_count, organization, items_count)
         self.__preprocess()
-        return self.model.predict(self.df)[0]
+        like_pred = self.model.predict(self.df)[0]
+        # 予測値がマイナスになる場合は0にする
+        if like_pred < 0:
+            like_pred = 0
+        return like_pred
 
 
 def main():
@@ -105,7 +110,7 @@ def main():
 
         # 予測
         pred = analyzer.predict(title, body, tags, followers_count, organization, items_count)
-        st.write(f"いいね数の予測値は{pred}です！")
+        st.write(f"## いいね数の予測値は {pred:.2f} です！")
 
 
 if __name__ == "__main__":
